@@ -7,6 +7,7 @@ const Upload = () => {
   const [file, setFile] = useState(null);
   const [error, setError] = useState("");
   const [jobDescription, setJobDescription] = useState("");
+  const [response, setResponse] = useState(""); 
   const navigate = useNavigate();
 
   const handleFileChange = (e) => {
@@ -20,26 +21,30 @@ const Upload = () => {
     }
   };
 
-const handleSubmit = (e) => {
-  e.preventDefault();
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-  if (!file) {
-    setError("Please upload a valid PDF resume.");
-    return;
-  }
+    if (!file) {
+      setError("Please upload a valid PDF resume.");
+      return;
+    }
 
-  if (!jobDescription.trim()) {
-    setError("Please enter a job description.");
-    return;
-  }
+    if (!jobDescription.trim()) {
+      setError("Please enter a job description.");
+      return;
+    }
 
-  
-  console.log("Uploading:", file.name);
-  console.log("Job Description:", jobDescription);
+    if (!response) {
+      setError("Please select a response");
+      return;
+    }
 
-  navigate("/thankyou");
-};
+    console.log("Uploading:", file.name);
+    console.log("Response:", response);
+    console.log("Job Description:", jobDescription);
 
+    navigate("/thankyou");
+  };
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -57,15 +62,31 @@ const handleSubmit = (e) => {
               file:rounded-md file:border-0 file:text-sm file:font-semibold
               file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200"
           />
+
+          
           {error && <p className="text-red-600 text-sm">{error}</p>}
 
+          
           <textarea
-                className="w-full h-40 p-3 border border-gray-300 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter job description here..."
-                value={jobDescription}
-                onChange={(e) => setJobDescription(e.target.value)}
+            className="w-full h-40 p-3 border border-gray-300 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter job description here..."
+            value={jobDescription}
+            onChange={(e) => setJobDescription(e.target.value)}
           ></textarea>
 
+          
+          
+          <select
+            value={response}
+            onChange={(e) => setResponse(e.target.value)}
+            className="w-full p-3 border border-gray-300 rounded-md bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="">Select Response</option>
+            <option value="bullet">Bullets</option>
+            <option value="summary">Summary</option>
+            <option value="both">Both</option>
+            
+          </select>
           <button
             type="submit"
             className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
@@ -73,8 +94,12 @@ const handleSubmit = (e) => {
             Upload
           </button>
         </form>
+
+       
         {file && (
-          <p className="text-green-600 text-sm mt-3">Selected File: {file.name}</p>
+          <p className="text-green-600 text-sm mt-3">
+            Selected File: {file.name}
+          </p>
         )}
       </div>
     </div>
